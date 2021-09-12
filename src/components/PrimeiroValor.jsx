@@ -1,20 +1,20 @@
 import React from "react"
-import './PrimeiroValor.css'
+import "./PrimeiroValor.css"
+
 
 function PrimeiroValor(props) {
 
-    const calcular = function(e) {
-        console.log(e)
-        props.calcular(e)
-    }
+  function alteracao(e){
+    props.alterar(+e.target.value)
+  }
 
-    return (
-        <div className="primeiro">
-            <label>Primeiro Valor:</label>
-            <input name="primeiro" onChange={calcular}
-                   type="number" value={props.valor}/>
-        </div>
-    )
+  return (
+    <div className="primeiro">
+      <label>Primeiro Valor: {props.valor}</label>
+      <input name="primeiro" type="number" value={props.valor} onChange={alteracao}/>
+    </div>
+  );
 }
 
-export default PrimeiroValor
+
+export default PrimeiroValor;

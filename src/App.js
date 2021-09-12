@@ -1,52 +1,52 @@
-import React, { useState } from "react"
+import React from "react"
+import { connect } from "react-redux"
 
 import PrimeiroValor from './components/PrimeiroValor'
 import SegundoValor from './components/SegundoValor'
 import ResultadoValor from './components/ResultadoValor'
 
+import { alterarNumeroPrimeiro } from "./store/actions/numeros"
+import { alterarNumeroSegundo } from "./store/actions/numeros"
+
 import './App.css';
 
 
-function App() {
-  const [primeiroValor, setPrimeiroValor] = useState(0)
-  const [segundoValor, setSegundoValor] = useState(0)
-  const [resultadoValor, setResultadoValor] = useState(0)
-
-  function changePrimeiro(e) {
-    let resultado = Number(e.target.value) + Number(segundoValor)
-    setResultadoValor(resultado)
-    setPrimeiroValor(e.target.value)
-  }
-
-  function changeSegundo(e) {
-    let resultado = Number(e.target.value) + Number(primeiroValor)
-    setResultadoValor(resultado)
-    setSegundoValor(e.target.value)
-  }
-
-  function changeGenerico(e) {
-    let valor = 0
-    if (e.target.name == 'primeiro') {
-      valor = Number(segundoValor)
-      setPrimeiroValor(e.target.value)
-    }
-    else if (e.target.name == 'segundo') {
-      valor = Number(primeiroValor)
-      setSegundoValor(e.target.value)
-    }
-    setResultadoValor(valor + Number(e.target.value))
-  }
-
+function App(props) {
   return (
     <div>
       <h1>Soma de dois valores</h1>
       <div className="App">
-        <PrimeiroValor valor={primeiroValor} calcular={changeGenerico}></PrimeiroValor>
-        <SegundoValor valor={segundoValor} calcular={changeGenerico}></SegundoValor>
-        <ResultadoValor valor={resultadoValor}></ResultadoValor>
+        <PrimeiroValor alterar={props.alterarPrimeiro} valor={props.numeros.primeiroNumero}></PrimeiroValor>
+        <SegundoValor alterar={props.alterarSegundo} valor={props.numeros.segundoNumero}></SegundoValor>
+        <ResultadoValor valor={props.numeros.resultadoValor}></ResultadoValor>
       </div>
     </div>
   );
 }
 
-export default App;
+
+function mapStateToProps(state) {
+  return {
+    numeros: state.numeros
+  }
+}
+
+
+function mapDispatchToProps(dispatch) {
+  return {
+    alterarPrimeiro(novoNumero) {
+      const action = alterarNumeroPrimeiro(novoNumero)
+      dispatch(action)
+    },
+    alterarSegundo(novoNumero) {
+      const action = alterarNumeroSegundo(novoNumero)
+      dispatch(action)
+    },
+  }
+}
+
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
